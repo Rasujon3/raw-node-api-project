@@ -1,20 +1,32 @@
 // dependencies
 const http = require('http');
-const { handleReqRes } = require('./helpers/handleReqRes')
+const environment = require('./helpers/environment');
+const { handleReqRes } = require('./helpers/handleReqRes');
+const data = require('./lib/data');
+
 
 // app object = module scaffolding
 const app = {};
 
-// configuration
-app.config = {
-    port: 3000
-};
-
+// testing the file
+// data.create('test', 'newFile', { 'name': 'Bangladesh', 'language': 'Bangla' }, function (err) {
+//     console.log(`Error was`, err);
+// });
+// data.read('test', 'newFile', (err, data) => {
+//     console.log(err, data);
+// });
+// data.update('test', 'newFile', { 'name': 'England', 'language': 'English' }, (err) => {
+//     console.log(err);
+// });
+data.delete('test', 'newFile', (err) => {
+    console.log(err);
+});
 // create server
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
-    server.listen(app.config.port, () => {
-        console.log(`LISTENING TO PORT ${app.config.port}`);
+    server.listen(environment.port, () => {
+        // console.log(`environment variable is ${process.env.NODE_ENV}`);
+        console.log(`LISTENING TO PORT ${environment.port}`);
     });
 }
 
