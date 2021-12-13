@@ -1,36 +1,31 @@
+/*
+ * Title: Uptime Monitoring Application
+ * Description: A RESTFul API to monitor up or down time of user defined links
+ * Author: Sumit Saha ( Learn with Sumit )
+ * Date: 11/15/2020
+ *
+ */
 // dependencies
 const http = require('http');
-const environment = require('./helpers/environment');
 const { handleReqRes } = require('./helpers/handleReqRes');
-const data = require('./lib/data');
 
-
-// app object = module scaffolding
+// app object - module scaffolding
 const app = {};
 
-// testing the file
-// data.create('test', 'newFile', { 'name': 'Bangladesh', 'language': 'Bangla' }, function (err) {
-//     console.log(`Error was`, err);
-// });
-// data.read('test', 'newFile', (err, data) => {
-//     console.log(err, data);
-// });
-// data.update('test', 'newFile', { 'name': 'England', 'language': 'English' }, (err) => {
-//     console.log(err);
-// });
-data.delete('test', 'newFile', (err) => {
-    console.log(err);
-});
+// configuration
+app.config = {
+    port: 3000,
+};
+
 // create server
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);
-    server.listen(environment.port, () => {
-        // console.log(`environment variable is ${process.env.NODE_ENV}`);
-        console.log(`LISTENING TO PORT ${environment.port}`);
+    server.listen(app.config.port, () => {
+        console.log(`listening to port ${app.config.port}`);
     });
-}
+};
 
-// handle request response
+// handle Request Response
 app.handleReqRes = handleReqRes;
 
 // start the server

@@ -1,15 +1,24 @@
+/*
+ * Title: Handle Request Response
+ * Description: Handle Resquest and response
+ * Author: Sumit Saha ( Learn with Sumit )
+ * Date: 11/21/2020
+ *
+ */
+
 // dependencies
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const routes = require('../routes');
 const { notFoundHandler } = require('../handlers/routeHandlers/notFoundHandler');
+const { parseJSON } = require('./utilities');
 
-// module scaffolding
+// modue scaffolding
 const handler = {};
 
 handler.handleReqRes = (req, res) => {
-    // response handle
-    // get the url & parse it
+    // request handling
+    // get the url and parse it
     const parsedUrl = url.parse(req.url, true);
     const path = parsedUrl.pathname;
     const trimmedPath = path.replace(/^\/+|\/+$/g, '');
@@ -34,25 +43,24 @@ handler.handleReqRes = (req, res) => {
     req.on('data', (buffer) => {
         realData += decoder.write(buffer);
     });
+
     req.on('end', () => {
         realData += decoder.end();
+
+        requestProperties.body = parseJSON(realData);
+
         chosenHandler(requestProperties, (statusCode, payload) => {
-            statusCode = typeof (statusCode) === 'number' ? statusCode : 500;
-            payload = typeof (payload) === 'object' ? payload : {};
+            statusCode = typeof statusCode === 'number' ? statusCode : 500;
+            payload = typeof payload === 'object' ? payload : {};
 
             const payloadString = JSON.stringify(payload);
+
             // return the final response
+            res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
         });
-        // response handle
-        res.end('Hello world');
-
-
-    })
-
-    // console.log(headersObject);
-    // response handle
-}
+    });
+};
 
 module.exports = handler;
